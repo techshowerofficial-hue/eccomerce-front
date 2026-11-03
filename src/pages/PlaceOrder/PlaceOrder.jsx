@@ -1,5 +1,4 @@
-
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { StoreGive } from "../../context/StoreGive";
@@ -7,6 +6,20 @@ import "./PlaceOrder.css";
 import API_URL from "../../api/api";
 
 const DELIVERY_CHARGE = 45;
+
+const INITIAL_FORM = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  house: "",
+  street: "",
+  city: "",
+  district: "",
+  state: "Madhya Pradesh",
+  pincode: "",
+  notes: "",
+};
 
 const PlaceOrder = () => {
   const {
@@ -22,19 +35,14 @@ const PlaceOrder = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState("");
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    house: "",
-    street: "",
-    city: "",
-    district: "",
-    state: "Madhya Pradesh",
-    pincode: "",
-    notes: "",
-  });
+  // Form state
+  const [formData, setFormData] = useState(INITIAL_FORM);
+
+  // Saved address states
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [loadingAddresses, setLoadingAddresses] = useState(true);
+  const [showAddressForm, setShowAddressForm] = useState(true);
 
   const params = new URLSearchParams(location.search);
   const productId = params.get("productId");
@@ -76,6 +84,107 @@ const PlaceOrder = () => {
 
   const totalAmount = subtotal + deliveryCharge;
 
+  // ==========================================
+  // FETCH SAVED ADDRESSES
+  // ==========================================
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchAddresses = async () => {
+      const authToken = token || localStorage.getItem("token");
+
+      if (!authToken) {
+        if (isMounted) {
+          setSavedAddresses([]);
+          setSelectedAddressId("");
+          setShowAddressForm(true);
+          setLoadingAddresses(false);
+        }
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/user/addresses`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!isMounted) return;
+
+        if (response.data?.success) {
+          const addresses = Array.isArray(response.data.addresses)
+            ? response.data.addresses
+            : [];
+
+          setSavedAddresses(addresses);
+
+          if (addresses.length > 0) {
+            const defaultAddress =
+              addresses.find((address) => address.isDefault) ||
+              addresses[0];
+
+            setSelectedAddressId(defaultAddress._id);
+            setShowAddressForm(false);
+
+            // Load the selected saved address into the form.
+            const nameParts = String(
+              defaultAddress.fullName || ""
+            )
+              .trim()
+              .split(/\s+/);
+
+            setFormData((previous) => ({
+              ...previous,
+              firstName: nameParts[0] || "",
+              lastName: nameParts.slice(1).join(" "),
+              phone: defaultAddress.phone || "",
+              house: defaultAddress.houseNo || "",
+              street: defaultAddress.area || "",
+              city: defaultAddress.city || "",
+              district: defaultAddress.district || "",
+              state:
+                defaultAddress.state || "Madhya Pradesh",
+              pincode: defaultAddress.pincode || "",
+            }));
+          } else {
+            setSelectedAddressId("");
+            setShowAddressForm(true);
+          }
+        }
+      } catch (error) {
+        console.error(
+          "Fetch saved addresses error:",
+          error.response?.data || error.message
+        );
+
+        if (isMounted) {
+          setSavedAddresses([]);
+          setSelectedAddressId("");
+          setShowAddressForm(true);
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingAddresses(false);
+        }
+      }
+    };
+
+    fetchAddresses();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token]);
+
+  // ==========================================
+  // FORM CHANGE
+  // ==========================================
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -84,6 +193,82 @@ const PlaceOrder = () => {
       [name]: value,
     }));
   };
+
+  // ==========================================
+  // SELECT SAVED ADDRESS
+  // ==========================================
+
+  const handleSelectAddress = (address) => {
+    setSelectedAddressId(address._id);
+
+    const nameParts = String(address.fullName || "")
+      .trim()
+      .split(/\s+/);
+
+    setFormData((previous) => ({
+      ...previous,
+      firstName: nameParts[0] || "",
+      lastName: nameParts.slice(1).join(" "),
+      phone: address.phone || "",
+      house: address.houseNo || "",
+      street: address.area || "",
+      city: address.city || "",
+      district: address.district || "",
+      state: address.state || "Madhya Pradesh",
+      pincode: address.pincode || "",
+    }));
+
+    setShowAddressForm(false);
+  };
+
+  // ==========================================
+  // ADD ANOTHER ADDRESS
+  // ==========================================
+
+  const handleAddAnotherAddress = () => {
+    setSelectedAddressId("");
+    setShowAddressForm(true);
+
+    // Keep customer details but clear the previous address.
+    setFormData((previous) => ({
+      ...previous,
+      house: "",
+      street: "",
+      city: "",
+      district: "",
+      state: "Madhya Pradesh",
+      pincode: "",
+    }));
+  };
+
+  // ==========================================
+  // CANCEL NEW ADDRESS
+  // ==========================================
+
+  const handleCancelNewAddress = () => {
+    const previousAddress = savedAddresses.find(
+      (address) => String(address._id) === String(selectedAddressId)
+    );
+
+    if (previousAddress) {
+      handleSelectAddress(previousAddress);
+      return;
+    }
+
+    const defaultAddress =
+      savedAddresses.find((address) => address.isDefault) ||
+      savedAddresses[0];
+
+    if (defaultAddress) {
+      handleSelectAddress(defaultAddress);
+    } else {
+      setShowAddressForm(true);
+    }
+  };
+
+  // ==========================================
+  // VALIDATE FORM
+  // ==========================================
 
   const validateForm = () => {
     const requiredFields = [
@@ -99,8 +284,20 @@ const PlaceOrder = () => {
     ];
 
     for (const field of requiredFields) {
-      if (!String(formData[field]).trim()) {
-        alert(`Please enter ${field}.`);
+      if (!String(formData[field] || "").trim()) {
+        const fieldLabels = {
+          firstName: "first name",
+          lastName: "last name",
+          phone: "mobile number",
+          house: "house number / building",
+          street: "street / area",
+          city: "village / city",
+          district: "district",
+          state: "state",
+          pincode: "PIN code",
+        };
+
+        alert(`Please enter ${fieldLabels[field] || field}.`);
         return false;
       }
     }
@@ -134,6 +331,10 @@ const PlaceOrder = () => {
     return true;
   };
 
+  // ==========================================
+  // PLACE ORDER
+  // ==========================================
+
   const handlePlaceOrder = async (event) => {
     event.preventDefault();
 
@@ -141,7 +342,6 @@ const PlaceOrder = () => {
 
     if (!validateForm()) return;
 
-    // Context token first, then localStorage.
     const authToken = token || localStorage.getItem("token");
 
     if (!authToken) {
@@ -187,9 +387,9 @@ const PlaceOrder = () => {
         }
       );
 
-      if (!response.data.success) {
+      if (!response.data?.success) {
         throw new Error(
-          response.data.message || "Unable to place order."
+          response.data?.message || "Unable to place order."
         );
       }
 
@@ -202,14 +402,42 @@ const PlaceOrder = () => {
         response.data.orderId ||
         "";
 
-      // Clear cart only after successful order creation.
+      // Refresh address list after successful order.
+      // Backend should save new addresses in user.addresses.
+      try {
+        const addressResponse = await axios.get(
+          `${API_URL}/api/user/addresses`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (addressResponse.data?.success) {
+          setSavedAddresses(
+            Array.isArray(addressResponse.data.addresses)
+              ? addressResponse.data.addresses
+              : []
+          );
+        }
+      } catch (addressError) {
+        console.error(
+          "Refresh saved addresses error:",
+          addressError.response?.data || addressError.message
+        );
+      }
+
       if (!productId && typeof clearCart === "function") {
         clearCart();
       }
 
       setSuccessOrderId(String(orderId || "Confirmed"));
     } catch (error) {
-      console.error("Place order error:", error);
+      console.error(
+        "Place order error:",
+        error.response?.data || error
+      );
 
       if (error.response?.status === 401) {
         alert(
@@ -227,7 +455,10 @@ const PlaceOrder = () => {
     }
   };
 
-  // Successful order screen
+  // ==========================================
+  // SUCCESS SCREEN
+  // ==========================================
+
   if (successOrderId) {
     return (
       <div className="placeorder order-success">
@@ -262,7 +493,10 @@ const PlaceOrder = () => {
     );
   }
 
-  // Empty cart screen
+  // ==========================================
+  // EMPTY CART SCREEN
+  // ==========================================
+
   if (orderItems.length === 0) {
     return (
       <div className="placeorder empty-checkout">
@@ -278,111 +512,272 @@ const PlaceOrder = () => {
     );
   }
 
+  // ==========================================
+  // CHECKOUT SCREEN
+  // ==========================================
+
   return (
     <div className="placeorder">
       <div className="delivery-information">
         <h2>Delivery Information</h2>
 
+        {loadingAddresses ? (
+          <div className="address-loading">
+            Loading saved addresses...
+          </div>
+        ) : (
+          <>
+            {/* SAVED ADDRESS LIST */}
+
+            {savedAddresses.length > 0 && (
+              <div className="saved-addresses-section">
+                <h3>Select Delivery Address</h3>
+
+                <div className="saved-addresses-list">
+                  {savedAddresses.map((address) => (
+                    <div
+                      key={address._id}
+                      className={`saved-address-card ${
+                        String(selectedAddressId) ===
+                        String(address._id)
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() => handleSelectAddress(address)}
+                    >
+                      <div className="saved-address-header">
+                        <label>
+                          <input
+                            type="radio"
+                            name="savedAddress"
+                            checked={
+                              String(selectedAddressId) ===
+                              String(address._id)
+                            }
+                            onChange={() =>
+                              handleSelectAddress(address)
+                            }
+                          />
+
+                          <strong>{address.fullName}</strong>
+                        </label>
+
+                        {address.isDefault && (
+                          <span className="default-address-badge">
+                            Default
+                          </span>
+                        )}
+                      </div>
+
+                      <p>
+                        {address.houseNo}, {address.area}
+                      </p>
+
+                      {address.landmark && (
+                        <p>
+                          Landmark: {address.landmark}
+                        </p>
+                      )}
+
+                      <p>
+                        {address.city}, {address.district}
+                      </p>
+
+                      <p>
+                        {address.state} - {address.pincode}
+                      </p>
+
+                      <p>Mobile: {address.phone}</p>
+
+                      <span className="address-type">
+                        {address.addressType || "Home"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {!showAddressForm && (
+                  <button
+                    type="button"
+                    className="add-another-address-button"
+                    onClick={handleAddAnotherAddress}
+                  >
+                    + Add Another Address
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* DELIVERY FORM */}
+
+            {showAddressForm && (
+              <div className="new-address-form">
+                <div className="new-address-heading">
+                  <h3>
+                    {savedAddresses.length > 0
+                      ? "Add Another Address"
+                      : "Add Delivery Address"}
+                  </h3>
+
+                  {savedAddresses.length > 0 && (
+                    <button
+                      type="button"
+                      className="cancel-address-button"
+                      onClick={handleCancelNewAddress}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+
+                <p className="address-form-note">
+                  Enter the address where you want your order delivered.
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ONE FORM ONLY: SAVED ADDRESS AND NEW ADDRESS */}
+
         <form onSubmit={handlePlaceOrder}>
-          <div className="multi-field">
-            <input
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="First Name"
-              autoComplete="given-name"
-              required
-            />
+          {showAddressForm && (
+            <>
+              <div className="multi-field">
+                <input
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder="First Name"
+                  autoComplete="given-name"
+                  required
+                />
 
-            <input
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Last Name"
-              autoComplete="family-name"
-              required
-            />
-          </div>
+                <input
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                  autoComplete="family-name"
+                  required
+                />
+              </div>
 
-          <input
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="10-digit Mobile Number"
-            type="tel"
-            inputMode="numeric"
-            autoComplete="tel"
-            maxLength={10}
-            required
-          />
+              <input
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="10-digit Mobile Number"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel"
+                maxLength={10}
+                required
+              />
 
-          <input
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address (Optional)"
-            type="email"
-            autoComplete="email"
-          />
+              <input
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email Address (Optional)"
+                type="email"
+                autoComplete="email"
+              />
 
-          <input
-            name="house"
-            value={formData.house}
-            onChange={handleChange}
-            placeholder="House Number / Building"
-            autoComplete="address-line1"
-            required
-          />
+              <input
+                name="house"
+                value={formData.house}
+                onChange={handleChange}
+                placeholder="House Number / Building"
+                autoComplete="address-line1"
+                required
+              />
 
-          <input
-            name="street"
-            value={formData.street}
-            onChange={handleChange}
-            placeholder="Street / Area / Landmark"
-            autoComplete="address-line2"
-            required
-          />
+              <input
+                name="street"
+                value={formData.street}
+                onChange={handleChange}
+                placeholder="Street / Area / Landmark"
+                autoComplete="address-line2"
+                required
+              />
 
-          <div className="multi-field">
-            <input
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              placeholder="Village / City"
-              autoComplete="address-level2"
-              required
-            />
+              <div className="multi-field">
+                <input
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Village / City"
+                  autoComplete="address-level2"
+                  required
+                />
 
-            <input
-              name="district"
-              value={formData.district}
-              onChange={handleChange}
-              placeholder="District"
-              required
-            />
-          </div>
+                <input
+                  name="district"
+                  value={formData.district}
+                  onChange={handleChange}
+                  placeholder="District"
+                  required
+                />
+              </div>
 
-          <div className="multi-field">
-            <input
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              placeholder="State"
-              autoComplete="address-level1"
-              required
-            />
+              <div className="multi-field">
+                <input
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  placeholder="State"
+                  autoComplete="address-level1"
+                  required
+                />
 
-            <input
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleChange}
-              placeholder="6-digit PIN Code"
-              inputMode="numeric"
-              maxLength={6}
-              autoComplete="postal-code"
-              required
-            />
-          </div>
+                <input
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  placeholder="6-digit PIN Code"
+                  inputMode="numeric"
+                  maxLength={6}
+                  autoComplete="postal-code"
+                  required
+                />
+              </div>
+            </>
+          )}
+
+          {!showAddressForm && selectedAddressId && (
+            <div className="selected-address-summary">
+              <h3>Delivering To</h3>
+
+              <p>
+                <strong>
+                  {formData.firstName} {formData.lastName}
+                </strong>
+              </p>
+
+              <p>
+                {formData.house}, {formData.street}
+              </p>
+
+              <p>
+                {formData.city}, {formData.district}
+              </p>
+
+              <p>
+                {formData.state} - {formData.pincode}
+              </p>
+
+              <p>Mobile: {formData.phone}</p>
+
+              <button
+                type="button"
+                className="edit-selected-address-button"
+                onClick={() => setShowAddressForm(true)}
+              >
+                Edit Address Details
+              </button>
+            </div>
+          )}
 
           <textarea
             name="notes"
@@ -391,6 +786,8 @@ const PlaceOrder = () => {
             placeholder="Order Notes (Optional)"
             rows={3}
           />
+
+          {/* ORDER SUMMARY */}
 
           <div className="checkout-summary">
             <h3>Order Summary</h3>
@@ -416,6 +813,7 @@ const PlaceOrder = () => {
 
             <div className="checkout-summary-item">
               <span>Subtotal</span>
+
               <strong>
                 ₹{subtotal.toLocaleString("en-IN")}
               </strong>
@@ -423,6 +821,7 @@ const PlaceOrder = () => {
 
             <div className="checkout-summary-item">
               <span>Delivery Charges</span>
+
               <strong>
                 ₹{deliveryCharge.toLocaleString("en-IN")}
               </strong>
@@ -439,7 +838,7 @@ const PlaceOrder = () => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || loadingAddresses}
             className="place-order-button"
           >
             {isSubmitting
@@ -460,4 +859,3 @@ const PlaceOrder = () => {
 };
 
 export default PlaceOrder;
-
