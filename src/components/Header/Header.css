@@ -1,0 +1,371 @@
+/* ==============================
+   NILE PREMIUM HERO SECTION
+================================ */
+
+.header {
+  position: relative;
+  width: calc(100% - 48px);
+  max-width: 1450px;
+  min-height: 510px;
+  height: 40vw;
+  max-height: 650px;
+  margin: 25px auto 45px;
+  overflow: hidden;
+  border-radius: 14px;
+
+  /* Existing background image */
+  background-image: url("/header.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Dark overlay for readable text */
+
+.header-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(25, 20, 16, 0.78) 0%,
+    rgba(35, 27, 20, 0.60) 42%,
+    rgba(35, 27, 20, 0.12) 100%
+  );
+}
+
+/* Main content */
+
+.header-contents {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 650px;
+  padding: 45px 0 55px;
+  margin-left: 7%;
+
+  animation: headerFadeIn 0.9s ease both;
+  box-sizing: border-box;
+}
+
+/* Small top label */
+
+.header-eyebrow {
+  margin-bottom: 22px;
+  color: #ead4b8;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  line-height: 1.8;
+}
+
+/* Heading */
+
+.header-contents h1 {
+  margin: 0;
+  color: #ffffff;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 5.2vw, 72px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+.header-contents h1 span {
+  color: #ead0ad;
+  font-style: italic;
+}
+
+/* Description */
+
+.header-contents p {
+  max-width: 510px;
+  margin: 22px 0 0;
+  padding: 0;
+
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.9;
+}
+
+/* Buttons section */
+
+.header-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* Primary button */
+
+.header-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  min-height: 51px;
+  padding: 0 24px;
+
+  border: 1px solid #f5eee5;
+  border-radius: 5px;
+
+  background: #f5eee5;
+  color: #393027;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.header-primary-btn span {
+  font-size: 19px;
+  transition: transform 0.25s ease;
+}
+
+.header-primary-btn:hover {
+  background: #98734f;
+  border-color: #98734f;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.header-primary-btn:hover span {
+  transform: translateX(4px);
+}
+
+/* Supporting text */
+
+.header-note {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: 0.3px;
+}
+
+/* Bottom label */
+
+.header-bottom-label {
+  position: absolute;
+  z-index: 2;
+  right: 35px;
+  bottom: 28px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  line-height: 1.8;
+}
+
+.header-bottom-line {
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  background: #ead0ad;
+}
+
+/* Animation */
+
+@keyframes headerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================
+   TABLET
+================================ */
+
+@media (max-width: 900px) {
+  .header {
+    width: calc(100% - 32px);
+    min-height: 450px;
+    height: 52vw;
+    margin: 20px auto 35px;
+  }
+
+  .header-contents {
+    max-width: 550px;
+    margin-left: 6%;
+    padding-right: 25px;
+  }
+
+  .header-contents h1 {
+    font-size: clamp(40px, 6vw, 58px);
+  }
+
+  .header-contents p {
+    max-width: 440px;
+    font-size: 14px;
+  }
+
+  .header-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+}
+
+/* ==============================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .header {
+    width: calc(100% - 24px);
+    min-height: 490px;
+    height: auto;
+    max-height: none;
+
+    margin: 12px auto 30px;
+    border-radius: 10px;
+
+    background-position: center;
+  }
+
+  .header-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(25, 20, 16, 0.78) 0%,
+      rgba(25, 20, 16, 0.60) 100%
+    );
+  }
+
+  .header-contents {
+    max-width: 100%;
+    margin: 0;
+    padding: 65px 23px 85px;
+  }
+
+  .header-eyebrow {
+    margin-bottom: 20px;
+    font-size: 9px;
+    letter-spacing: 1.8px;
+    line-height: 1.8;
+  }
+
+  .header-contents h1 {
+    font-size: clamp(37px, 10vw, 49px);
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+  }
+
+  .header-contents p {
+    max-width: 100%;
+    margin-top: 19px;
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .header-buttons {
+    width: 100%;
+    gap: 13px;
+    margin-top: 25px;
+  }
+
+  .header-primary-btn {
+    min-height: 48px;
+    max-width: 100%;
+    padding: 0 17px;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .header-note {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .header-bottom-label {
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    gap: 8px;
+    font-size: 8px;
+    letter-spacing: 1.1px;
+  }
+
+  .header-bottom-line {
+    flex-shrink: 0;
+    width: 20px;
+  }
+}
+
+/* ==============================
+   SMALL MOBILE
+================================ */
+
+@media (max-width: 360px) {
+  .header {
+    min-height: 460px;
+  }
+
+  .header-contents {
+    padding: 55px 17px 80px;
+  }
+
+  .header-contents h1 {
+    font-size: 35px;
+  }
+
+  .header-contents p {
+    font-size: 12px;
+  }
+
+  .header-eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.3px;
+  }
+
+  .header-primary-btn {
+    padding: 0 13px;
+    gap: 9px;
+    font-size: 11px;
+  }
+
+  .header-bottom-label {
+    font-size: 7px;
+    letter-spacing: 0.8px;
+  }
+}
+
+/* Respect reduced motion preference */
+
+@media (prefers-reduced-motion: reduce) {
+  .header-contents {
+    animation: none;
+  }
+
+  .header-primary-btn,
+  .header-primary-btn span {
+    transition: none;
+  }
+}

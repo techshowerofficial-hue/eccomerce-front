@@ -1,0 +1,42 @@
+
+.read-more-container {
+  width: 100%;
+  min-width: 0;
+}
+
+.read-more-text {
+  margin: 0;
+  font-size: inherit;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.read-more-text.collapsed {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--description-lines, 3);
+  line-clamp: var(--description-lines, 3);
+  overflow: hidden;
+}
+
+.read-more-text.expanded {
+  display: block;
+  overflow: visible;
+}
+
+.read-more-button {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #8b5e3c;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  text-decoration: underline;
+}
+

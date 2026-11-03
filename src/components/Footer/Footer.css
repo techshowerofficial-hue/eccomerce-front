@@ -1,0 +1,302 @@
+/* =========================
+   NILE PREMIUM FOOTER
+========================= */
+
+.nile-footer {
+  width: 100%;
+  margin-top: 70px;
+  padding: 0;
+  background: #f8f5ef;
+  color: #38332d;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.nile-footer * {
+  box-sizing: border-box;
+}
+
+/* Main Footer */
+
+.footer-main {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 65px 30px 55px;
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr 1fr 1.5fr;
+  gap: 45px;
+}
+
+/* Brand */
+
+.footer-brand {
+  max-width: 350px;
+}
+
+.footer-logo {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: #38332d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 43px;
+  font-weight: 600;
+  letter-spacing: -2px;
+  text-decoration: none;
+}
+
+.footer-logo span {
+  color: #a67c52;
+}
+
+.footer-tagline {
+  margin: 0 0 17px;
+  color: #98734f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.footer-description {
+  margin: 0;
+  color: #777066;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+/* Social Links */
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 24px;
+}
+
+.footer-social-link {
+  width: 37px;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ded5c8;
+  border-radius: 50%;
+  color: #65513e;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.footer-social-link:hover {
+  border-color: #98734f;
+  background: #98734f;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* Footer Columns */
+
+.footer-column {
+  min-width: 0;
+}
+
+.footer-column h3 {
+  position: relative;
+  margin: 9px 0 25px;
+  padding-bottom: 13px;
+  color: #38332d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.footer-column h3::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 35px;
+  height: 2px;
+  background: #a67c52;
+  content: "";
+}
+
+.footer-column ul {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-column ul li,
+.footer-column ul li a {
+  color: #777066;
+  font-size: 13px;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  overflow-wrap: anywhere;
+}
+
+.footer-column ul li a:hover {
+  color: #98734f;
+}
+
+/* Contact */
+
+.footer-contact-text {
+  margin: 0 0 18px;
+  color: #777066;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 15px;
+  color: #777066;
+  font-size: 12px;
+  line-height: 1.7;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.footer-contact-item:hover {
+  color: #98734f;
+}
+
+.footer-contact-icon {
+  flex-shrink: 0;
+  color: #98734f;
+  font-size: 16px;
+}
+
+/* Bottom Bar */
+
+.footer-bottom {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 21px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #e4ddd2;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: #898176;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.footer-bottom strong {
+  color: #38332d;
+}
+
+.footer-made-with span {
+  color: #a67c52;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1000px) {
+  .footer-main {
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px 50px;
+    padding: 50px 30px 40px;
+  }
+
+  .footer-brand {
+    max-width: 400px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .nile-footer {
+    margin-top: 45px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px 22px;
+    padding: 40px 20px 30px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+
+  .footer-logo {
+    font-size: 38px;
+  }
+
+  .footer-description {
+    max-width: 430px;
+    font-size: 12px;
+  }
+
+  .footer-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+
+  .footer-column ul {
+    gap: 12px;
+  }
+
+  .footer-column ul li,
+  .footer-column ul li a {
+    font-size: 12px;
+  }
+
+  .footer-contact {
+    grid-column: 1 / -1;
+  }
+
+  .footer-contact-text {
+    max-width: 400px;
+  }
+
+  .footer-contact-item {
+    font-size: 12px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 18px 20px;
+  }
+
+  .footer-bottom p {
+    font-size: 11px;
+  }
+}
+
+/* Small Phones */
+
+@media (max-width: 360px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand,
+  .footer-contact {
+    grid-column: auto;
+  }
+}
