@@ -1,4 +1,5 @@
 import React from "react";
+import { useContext } from "react";
 import { StoreGive } from "../../context/StoreGive";
 import "./ProductDisplay.css";
 const ProductDisplay = ({ category = "All" }) => {
