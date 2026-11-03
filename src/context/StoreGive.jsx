@@ -5,11 +5,11 @@ useEffect,
 useState,
 } from "react";
 import axios from "axios";
+import API_URL from "../api/api";
 
 export const StoreGive = createContext(null);
 
-const API_URL = "http://localhost:4000";
-
+// Normalize product data
 const normalizeProduct = (product) => {
 const images = Array.isArray(product.images)
 ? product.images.filter(Boolean)
@@ -26,6 +26,7 @@ stock: Number(product.stock) || 0,
 };
 };
 
+// Generate image URL
 const getImageUrl = (image) => {
 if (!image) return "";
 
@@ -42,9 +43,12 @@ const [token, setToken] = useState("");
 const [shop_list, setShopList] = useState([]);
 const [productsLoading, setProductsLoading] = useState(true);
 const [productsError, setProductsError] = useState("");
+
 const [categories, setCategories] = useState([]);
 const [categoriesLoading, setCategoriesLoading] = useState(true);
 const [categoriesError, setCategoriesError] = useState("");
+
+// Restore cart from localStorage
 const [cartItems, setCartItems] = useState(() => {
 try {
 const savedCart = localStorage.getItem("nile_cart");
@@ -54,7 +58,7 @@ return {};
 }
 });
 
-// Fetch products from backend
+// Fetch products
 const fetchProducts = useCallback(async () => {
 setProductsLoading(true);
 
@@ -94,24 +98,69 @@ useEffect(() => {
 fetchProducts();
 }, [fetchProducts]);
 
-// Add product to cart
-const addToCart = useCallback((itemId, quantity = 1) => {
-  const id = String(itemId || "");
-  const amount = Math.max(1, Math.floor(Number(quantity) || 1));
+// Fetch categories
+const fetchCategories = useCallback(async () => {
+setCategoriesLoading(true);
 
-  if (!id) {
-    console.error("Cannot add product: missing product ID");
-    return;
+
+try {
+  setCategoriesError("");
+
+  const response = await axios.get(
+    `${API_URL}/api/categories/list`
+  );
+
+  if (!response.data.success) {
+    throw new Error(
+      response.data.message || "Unable to load categories."
+    );
   }
 
-  setCartItems((previous) => {
-    const currentQuantity = Number(previous[id]) || 0;
+  const categoryData = response.data.data || [];
 
-    return {
-      ...previous,
-      [id]: currentQuantity + amount,
-    };
-  });
+  setCategories(
+    categoryData.filter((item) => item.isActive !== false)
+  );
+} catch (error) {
+  console.error("Fetch categories error:", error);
+
+  setCategoriesError(
+    error.response?.data?.message ||
+      error.message ||
+      "Unable to load categories."
+  );
+} finally {
+  setCategoriesLoading(false);
+}
+
+
+}, []);
+
+useEffect(() => {
+fetchCategories();
+}, [fetchCategories]);
+
+// Add product to cart
+const addToCart = useCallback((itemId, quantity = 1) => {
+const id = String(itemId || "");
+const amount = Math.max(1, Math.floor(Number(quantity) || 1));
+
+
+if (!id) {
+  console.error("Cannot add product: missing product ID");
+  return;
+}
+
+setCartItems((previous) => {
+  const currentQuantity = Number(previous[id]) || 0;
+
+  return {
+    ...previous,
+    [id]: currentQuantity + amount,
+  };
+});
+
+
 }, []);
 
 // Decrease quantity
@@ -153,42 +202,7 @@ setCartItems((previous) => {
 
 
 };
-const fetchCategories = useCallback(async () => {
-  setCategoriesLoading(true);
 
-  try {
-    setCategoriesError("");
-
-    const response = await axios.get(
-      `${API_URL}/api/categories/list`
-    );
-
-    if (!response.data.success) {
-      throw new Error(
-        response.data.message || "Unable to load categories."
-      );
-    }
-
-    const categoryData = response.data.data || [];
-
-    setCategories(
-      categoryData.filter((item) => item.isActive !== false)
-    );
-  } catch (error) {
-    console.error("Fetch categories error:", error);
-
-    setCategoriesError(
-      error.response?.data?.message ||
-        error.message ||
-        "Unable to load categories."
-    );
-  } finally {
-    setCategoriesLoading(false);
-  }
-}, []);
-useEffect(() => {
-  fetchCategories();
-}, [fetchCategories]);
 // Remove product completely
 const deleteFromCart = (itemId) => {
 setCartItems((previous) => {
@@ -231,7 +245,7 @@ return getCartItems().reduce(
 // Total product quantity
 const getTotalCartItems = () => {
 return Object.values(cartItems).reduce(
-(total, quantity) => total + quantity,
+(total, quantity) => total + (Number(quantity) || 0),
 0
 );
 };
@@ -281,10 +295,12 @@ getCartItems,
 getTotalCartAmount,
 getTotalCartItems,
 clearCart,
+
 categories,
 categoriesLoading,
 categoriesError,
 fetchCategories,
+
 token,
 setToken,
 

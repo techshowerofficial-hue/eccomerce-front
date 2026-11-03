@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { StoreGive } from "../../context/StoreGive";
 import ProductItem from "../ProductItem/ProductItem";
 import "./ProductDisplay.css";
-
+import API_URL from "../api/api";
 const ProductDisplay = ({ category = "All" }) => {
   const {
     shop_list = [],

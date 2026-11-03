@@ -1,7 +1,9 @@
-import React, { useContext, useState } from 'react'
-import './Login.css'
-import axios from 'axios';
-import { StoreGive } from '../../context/StoreGive';
+import React, { useContext, useState } from "react";
+import "./Login.css";
+import axios from "axios";
+import { StoreGive } from "../../context/StoreGive";
+import API_URL from "../../api/api";
+
 const Login = ({setLoginpop}) => {
    
     const [currentshow, setCurrentshow] = useState("SignIn");
@@ -17,37 +19,49 @@ const Login = ({setLoginpop}) => {
         setData(data=>({...data,[name]:value}))
     }
 
-  const onSubmitHandler = async (event) =>{
-       event.preventDefault();
-       const url = "http://localhost:4000";
-          let newUrl = url;
-       if (currentshow==="Login") {
-           newUrl += "/api/user/login"
-       }
-       else{
-           newUrl += "/api/user/register"
-     }  
-        
-      const response = await axios.post(newUrl,data)
-  
-        
-      if (response.data.success) {
-        
-  setData({
-    name:"",
-   email:"",
-   password:""
-})
-setLoginpop(false)
- setToken(response.data.token);
-  localStorage.setItem("token",response.data.token);
+const onSubmitHandler = async (event) => {
+  event.preventDefault();
 
-        
+  try {
+    const endpoint =
+      currentshow === "Login"
+        ? "/api/user/login"
+        : "/api/user/register";
+
+    const response = await axios.post(`${API_URL}${endpoint}`, data);
+
+    if (response.data.success) {
+      setData({
+        name: "",
+        email: "",
+        password: "",
+      });
+
+      setLoginpop(false);
+
+      setToken(response.data.token);
+
+      localStorage.setItem("token", response.data.token);
+
+      // Save customer information for Navbar
+      if (response.data.user) {
+        localStorage.setItem(
+          "nile_customer",
+          JSON.stringify(response.data.user)
+        );
       }
-     else{      
-      alert(response.data.message)      
-       }
-      }
+    } else {
+      alert(response.data.message || "Something went wrong.");
+    }
+  } catch (error) {
+    console.error("Login/Register Error:", error);
+
+    alert(
+      error.response?.data?.message ||
+        "Unable to connect to the server. Please try again."
+    );
+  }
+};
     return (
         <div className='Login'>
             <form onSubmit={onSubmitHandler} className="login-container">

@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { StoreGive } from "../../context/StoreGive";
 import "./PlaceOrder.css";
+import API_URL from "../../api/api";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const DELIVERY_CHARGE = 45;
 
 const PlaceOrder = () => {
