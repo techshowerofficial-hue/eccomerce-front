@@ -1,4 +1,4 @@
-import logo from './zivnel.png'
+import logo from './Zivnel.png'
 import header_img from './header.webp'
 
 export const assets = {
