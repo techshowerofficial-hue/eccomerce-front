@@ -73,15 +73,14 @@ const Navbar = () => {
     <nav className="navbar">
       {/* Logo */}
       <Link to="/" className="brand-logo" onClick={closeMenu}>
-        <img
+  
+
+        <div className="brand-text">
+             <img
           src={assets.logo}
           alt="Nile Gifts"
           className="logo-img"
         />
-
-        <div className="brand-text">
-          <h2>Nile</h2>
-          <span>Handmade With Love</span>
         </div>
       </Link>
 

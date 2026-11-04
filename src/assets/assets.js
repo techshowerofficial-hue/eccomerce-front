@@ -1,4 +1,4 @@
-import logo from './Nile-logo.png'
+import logo from './zivnel.png'
 import header_img from './header.webp'
 
 export const assets = {

@@ -11,18 +11,19 @@ const Footer = () => {
         {/* Brand Section */}
         <div className="footer-brand">
           <Link to="/" className="footer-logo">
-            nile<span>.</span>
+            Zivnel<span>.</span>
           </Link>
 
-          <p className="footer-tagline">
-            Little things, beautiful memories.
-          </p>
+<p className="footer-tagline">
+  Affordable Fashion. A Second Life.
+</p>
 
-          <p className="footer-description">
-            Discover thoughtfully crafted gifts, handmade creations and
-            personalized surprises made to make your special moments
-            unforgettable.
-          </p>
+<p className="footer-description">
+  Welcome to Zivnel! We offer pre-loved clothing at affordable prices.
+  Our products are pre-owned and are not brand-new. Please check each
+  product's description, images, measurements, and condition before ordering.
+</p>
+
 
           <div className="footer-socials">
             <a
@@ -140,7 +141,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="footer-bottom">
         <p>
-          © {currentYear} <strong>Nile</strong>. All rights reserved.
+          © {currentYear} <strong>Zivnel</strong>. All rights reserved.
         </p>
 
         <p className="footer-made-with">

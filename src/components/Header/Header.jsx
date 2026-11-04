@@ -23,21 +23,21 @@ const Header = () => {
       <div className="header-overlay"></div>
 
       <div className="header-contents">
-        <span className="header-eyebrow">
-          ✦ MADE WITH LOVE, JUST FOR YOU ✦
-        </span>
+<span className="header-eyebrow">
+  ✦ WELCOME TO ZIVNEL ✦
+</span>
 
-        <h1>
-          Gifts That Feel
-          <br />
-          <span>Extra Special.</span>
-        </h1>
+<h1>
+  Elevate Your Style.
+  <br />
+  <span>Define Your Look.</span>
+</h1>
 
-        <p>
-          Discover beautiful handmade creations and personalized gifts
-          crafted to celebrate your most precious moments. Add your own
-          touch and turn every gift into a lasting memory.
-        </p>
+<p>
+  Discover stylish clothing for every occasion.
+  Explore our latest collection and find fashion that
+  matches your personality.
+</p>
 
         <div className="header-buttons">
           <button
@@ -47,16 +47,15 @@ const Header = () => {
             Explore Our Collection <span>→</span>
           </button>
 
-          <span className="header-note">
-            Handmade with care. Personalized for you.
-          </span>
+<span className="header-note">
+  Discover Your Style with Zivnel.
+</span>
         </div>
       </div>
-
-      <div className="header-bottom-label">
-        <span className="header-bottom-line"></span>
-        THOUGHTFUL GIFTS · PERSONALIZED CREATIONS
-      </div>
+<div className="header-bottom-label">
+  <span className="header-bottom-line"></span>
+  EVERYDAY FASHION · YOUR STYLE · ZIVNEL
+</div>
     </section>
   );
 };

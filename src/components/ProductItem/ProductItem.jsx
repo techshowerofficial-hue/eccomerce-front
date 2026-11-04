@@ -77,7 +77,7 @@ Image not available </div>
 )}
 
 
-    <span className="custom-badge">Nile Collection</span>
+  <span className="custom-badge">Pre-Loved Fashion</span>
   </button>
 
   <div className="product-item-info">

@@ -66,7 +66,7 @@ const ProductDisplay = ({ category = "All" }) => {
             : category}
         </h2>
 
-        <p>Discover your favourite products from Nile.</p>
+     <p>Discover your favourite products from Zivnel.</p>
       </div>
 
       {filteredProducts.length > 0 ? (
