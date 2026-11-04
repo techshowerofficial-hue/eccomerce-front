@@ -77,7 +77,13 @@ Image not available </div>
 )}
 
 
-  <span className="custom-badge">Zivnel Collection</span>
+<span className="custom-badge">Zivnel Collection</span>
+
+{outOfStock && (
+  <span className="out-of-stock-overlay">
+    OUT OF STOCK
+  </span>
+)}
   </button>
 
   <div className="product-item-info">
