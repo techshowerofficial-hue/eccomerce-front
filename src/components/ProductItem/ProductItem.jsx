@@ -77,7 +77,7 @@ Image not available </div>
 )}
 
 
-  <span className="custom-badge">Pre-Loved Fashion</span>
+  <span className="custom-badge">Zivnel Collection</span>
   </button>
 
   <div className="product-item-info">

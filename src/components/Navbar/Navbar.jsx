@@ -246,8 +246,8 @@ const Navbar = () => {
             {/* Mobile Menu Header */}
             <div className="mobile-menu-header">
               <div>
-                <h3>Nile</h3>
-                <p>Handmade With Love</p>
+                <h3>Zivnel</h3>
+                <p> fashion that matches your personality.</p>
               </div>
 
               <button
