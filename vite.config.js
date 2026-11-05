@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -15,10 +16,10 @@ export default defineConfig({
       ],
 
       manifest: {
-        name: "Nile Handmade Gifts",
-        short_name: "Nile",
+        name: "Zivnel - Online Shopping Store",
+        short_name: "Zivnel",
         description:
-          "Discover handmade candles, personalized gifts, cards and unique creations.",
+          "Shop fashion, preloved clothes, accessories, stationery and everyday essentials online with Zivnel.",
 
         theme_color: "#ffffff",
         background_color: "#ffffff",
@@ -51,6 +52,9 @@ export default defineConfig({
 
       workbox: {
         navigateFallback: "index.html",
+
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+
         globPatterns: [
           "**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg,woff2}",
         ],
@@ -62,3 +66,4 @@ export default defineConfig({
     }),
   ],
 });
+
