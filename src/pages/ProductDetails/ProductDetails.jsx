@@ -488,23 +488,7 @@ const handleShareProduct = async () => {
           {/* Out of Stock Message */}
         {/* ORDER BUTTONS */}
 
-{!outOfStock && (
-  <div className="product-order-buttons">
-    <button
-      type="button"
-      onClick={handleAddToCart}
-    >
-      Add to Cart
-    </button>
 
-    <button
-      type="button"
-      onClick={handleBuyNow}
-    >
-      Buy Now
-    </button>
-  </div>
-)}
           {/* --------------------------------
               ORDER BUTTONS
           -------------------------------- */}
