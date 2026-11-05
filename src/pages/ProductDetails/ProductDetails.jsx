@@ -139,18 +139,57 @@ const ProductDetails = () => {
   // BUY NOW
   // --------------------------------
 
-  const handleBuyNow = () => {
-    if (outOfStock) {
-      alert("This product is currently out of stock.");
-      return;
-    }
+const handleBuyNow = () => {
+  if (outOfStock) return;
 
-    addToCart(String(product._id), quantity);
+  const token = localStorage.getItem("token");
 
-    navigate(
-      `/order?productId=${encodeURIComponent(product._id)}`
-    );
+  if (!token) {
+    navigate("/login", {
+      state: {
+        from: `/order?productId=${encodeURIComponent(product._id)}`,
+      },
+    });
+
+    return;
+  }
+
+  addToCart(String(product._id), quantity);
+
+  navigate(
+    `/order?productId=${encodeURIComponent(product._id)}`
+  );
+};
+
+// --------------------------------
+// SHARE PRODUCT
+// --------------------------------
+
+const handleShareProduct = async () => {
+  const productUrl = `${window.location.origin}/product/${product._id}`;
+
+  const shareData = {
+    title: product.name,
+    text: `Check out ${product.name} on Zivnel! Price: ₹${price.toLocaleString("en-IN")}`,
+    url: productUrl,
   };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(productUrl);
+      alert("Product link copied successfully!");
+    } else {
+      window.prompt("Copy this product link:", productUrl);
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.error("Share failed:", error);
+    }
+  }
+};
+
 
   // --------------------------------
   // IMAGE GALLERY
@@ -242,7 +281,11 @@ const ProductDetails = () => {
           >
             {selectedImage ? (
               <img
-                src={getImageUrl(selectedImage)}
+      src={
+  selectedImage?.startsWith("http")
+    ? selectedImage
+    : getImageUrl(selectedImage)
+}
                 alt={product.name}
                 draggable="false"
               />
@@ -301,7 +344,11 @@ const ProductDetails = () => {
                     aria-pressed={selectedImage === image}
                   >
                     <img
-                      src={getImageUrl(image)}
+                    src={
+  image?.startsWith("http")
+    ? image
+    : getImageUrl(image)
+}
                       alt={`${product.name} view ${index + 1}`}
                       draggable="false"
                     />
@@ -327,6 +374,32 @@ const ProductDetails = () => {
           </div>
 
           <h1>{product.name}</h1>
+
+<button
+  type="button"
+  className="product-share-button"
+  onClick={handleShareProduct}
+  aria-label="Share this product"
+>
+  <svg
+    width="19"
+    height="19"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4" />
+  </svg>
+
+  <span>Share Product</span>
+</button>
+
 
           <ReadMoreText
             text={
@@ -413,12 +486,25 @@ const ProductDetails = () => {
           </div>
 
           {/* Out of Stock Message */}
-          {outOfStock && (
-            <p className="out-of-stock-message">
-              This product is currently out of stock.
-            </p>
-          )}
+        {/* ORDER BUTTONS */}
 
+{!outOfStock && (
+  <div className="product-order-buttons">
+    <button
+      type="button"
+      onClick={handleAddToCart}
+    >
+      Add to Cart
+    </button>
+
+    <button
+      type="button"
+      onClick={handleBuyNow}
+    >
+      Buy Now
+    </button>
+  </div>
+)}
           {/* --------------------------------
               ORDER BUTTONS
           -------------------------------- */}

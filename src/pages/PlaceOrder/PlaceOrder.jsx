@@ -5,7 +5,7 @@ import { StoreGive } from "../../context/StoreGive";
 import "./PlaceOrder.css";
 import API_URL from "../../api/api";
 
-const DELIVERY_CHARGE = 45;
+const DELIVERY_CHARGE = 0;
 
 const INITIAL_FORM = {
   firstName: "",
@@ -468,7 +468,7 @@ const PlaceOrder = () => {
           <h2>Order Placed Successfully!</h2>
 
           <p>
-            Thank you for shopping with Nile. Your order has been
+            Thank you for shopping with Zivnel. Your order has been
             submitted successfully.
           </p>
 

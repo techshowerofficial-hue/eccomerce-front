@@ -20,8 +20,12 @@ const Explore = ({ category, setCategory }) => {
       image: allImage,
       isDefault: true,
     },
-    ...categories
-      .filter((item) => item.isActive !== false)
+...categories
+  .filter(
+    (item) =>
+      item.isActive !== false &&
+      !item.parentCategory
+  )
       .map((item) => ({
         ...item,
         name: item.name || item.categoryName,

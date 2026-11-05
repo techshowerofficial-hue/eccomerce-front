@@ -113,7 +113,7 @@ setError("");
 setSuccess("");
 };
 
-return ( <div className="auth-page"> <div className="auth-card"> <div className="auth-brand"> <div className="auth-logo">N</div> <h1>NILE</h1> <p>Your shopping destination</p> </div>
+return ( <div className="auth-page"> <div className="auth-card"> <div className="auth-brand"> <div className="auth-logo">N</div> <h1>Zivnel</h1> <p>Your shopping destination</p> </div>
 
 
     <div className="auth-heading">
@@ -233,7 +233,7 @@ return ( <div className="auth-page"> <div className="auth-card"> <div className=
     </div>
 
     <p className="auth-footer">
-      Secure shopping experience with Nile.
+      Secure shopping experience with Zivnel.
     </p>
   </div>
 </div>

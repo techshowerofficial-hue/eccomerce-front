@@ -86,22 +86,20 @@ const Footer = () => {
           <h3>Customer Care</h3>
 
           <ul>
-            <li>
-              <a href="tel:+916263515604">Call Us</a>
-            </li>
+        
 
             <li>
               <a
-                href="https://wa.me/YOUR_WHATSAPP_NUMBER"
+                href="https://wa.me/+916263515604"
                 target="_blank"
                 rel="noreferrer"
               >
-                WhatsApp Orders
+                WhatsApp Support
               </a>
             </li>
 
             <li>
-              <a href="mailto:niteshsinghtomar424@gmail.com">
+              <a href="mailto:zivnelofficial@gmail.com">
                 Email Support
               </a>
             </li>
@@ -120,20 +118,14 @@ const Footer = () => {
             Have something special in mind? We would love to hear from you.
           </p>
 
-          <a
-            href="tel:+916263515604"
-            className="footer-contact-item"
-          >
-            <span className="footer-contact-icon">☎</span>
-            <span>+91 6263515604</span>
-          </a>
+      
 
           <a
-            href="mailto:niteshsinghtomar424@gmail.com"
+            href="mailto:zivnelofficial@gmail.com"
             className="footer-contact-item"
           >
             <span className="footer-contact-icon">✉</span>
-            <span>niteshsinghtomar424@gmail.com</span>
+            <span>zivnelofficial@gmail.com</span>
           </a>
         </div>
       </div>

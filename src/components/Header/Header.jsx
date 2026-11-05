@@ -1,63 +1,149 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
+const offers = [
+  {
+    id: 1,
+    tag: "FESTIVE SPECIAL",
+    title: "Diwali Special Offer",
+    highlight: "Celebrate More, Save More!",
+    description:
+      "Explore amazing fashion deals and discover something special this festive season.",
+    button: "Shop Diwali Offers",
+    image: "/offers/diwali.png",
+    position: "center",
+  },
+  {
+    id: 2,
+    tag: "FRESH FINDS",
+    title: "Discover Your Style",
+    highlight: "Fashion for Every Mood.",
+    description:
+      "Explore new and preloved fashion at prices you'll love.",
+    button: "Explore Collection",
+    image: "/offers/fashion.png",
+    position: "center",
+  },
+  {
+    id: 3,
+    tag: "SPECIAL DEALS",
+    title: "More Offers. More Savings.",
+    highlight: "Your Favourite Deals Await!",
+    description:
+      "Discover exciting deals across fashion, accessories and stationery.",
+    button: "Get More Offers",
+    image: "/offers/deals.png",
+    position: "center",
+  },
+];
+
 const Header = () => {
   const navigate = useNavigate();
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const exploreProducts = () => {
-  const shopSection = document.getElementById("ProductDisplay");
+    const shopSection = document.getElementById("ProductDisplay");
 
-  if (shopSection) {
-    shopSection.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  } else {
-    navigate("/#ProductDisplay");
-  }
-};
+    if (shopSection) {
+      shopSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      navigate("/#ProductDisplay");
+    }
+  };
+
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % offers.length);
+  };
+
+  const prevSlide = () => {
+    setActiveSlide(
+      (prev) => (prev - 1 + offers.length) % offers.length
+    );
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % offers.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentOffer = offers[activeSlide];
 
   return (
-    <section className="header" id="header">
-      <div className="header-overlay"></div>
+    <section className="zivnel-hero" id="header">
+      <div
+        className="zivnel-hero-image"
+        style={{
+          backgroundImage: `url("${currentOffer.image}")`,
+          backgroundPosition: currentOffer.position,
+        }}
+        key={currentOffer.id}
+      />
 
-      <div className="header-contents">
-<span className="header-eyebrow">
-  ✦ WELCOME TO ZIVNEL ✦
-</span>
+      <div className="zivnel-hero-overlay" />
 
-<h1>
-  Elevate Your Style.
-  <br />
-  <span>Define Your Look.</span>
-</h1>
+      <div className="zivnel-hero-content" key={currentOffer.id}>
+        <span className="zivnel-offer-tag">
+          ✦ {currentOffer.tag}
+        </span>
 
-<p>
-  Discover stylish clothing for every occasion.
-  Explore our latest collection and find fashion that
-  matches your personality.
-</p>
+        <h1>
+          {currentOffer.title}
+          <br />
+          <span>{currentOffer.highlight}</span>
+        </h1>
 
-        <div className="header-buttons">
-          <button
-            className="header-primary-btn"
-            onClick={exploreProducts}
-          >
-            Explore Our Collection <span>→</span>
-          </button>
+        <p>{currentOffer.description}</p>
 
-<span className="header-note">
-  Discover Your Style with Zivnel.
-</span>
-        </div>
+        <button
+          className="zivnel-hero-button"
+          onClick={exploreProducts}
+        >
+          {currentOffer.button}
+          <span>→</span>
+        </button>
       </div>
-<div className="header-bottom-label">
-  <span className="header-bottom-line"></span>
-  EVERYDAY FASHION · YOUR STYLE · ZIVNEL
-</div>
+
+      <button
+        className="zivnel-slider-arrow prev"
+        onClick={prevSlide}
+        aria-label="Previous offer"
+      >
+        &#10094;
+      </button>
+
+      <button
+        className="zivnel-slider-arrow next"
+        onClick={nextSlide}
+        aria-label="Next offer"
+      >
+        &#10095;
+      </button>
+
+      <div className="zivnel-slider-dots">
+        {offers.map((offer, index) => (
+          <button
+            key={offer.id}
+            className={activeSlide === index ? "active" : ""}
+            onClick={() => setActiveSlide(index)}
+            aria-label={`Go to offer ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      <div className="zivnel-hero-bottom">
+        FASHION · LIFESTYLE · EVERYDAY ESSENTIALS
+      </div>
     </section>
   );
 };
 
 export default Header;
+

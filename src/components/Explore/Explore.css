@@ -1,46 +1,83 @@
-/* ===========================
-   EXPLORE SECTION
-=========================== */
+
+/* ================================
+   EXPLORE CATEGORIES
+================================ */
 
 .explore {
+  width: 100%;
+  max-width: 1280px;
+  margin: 48px auto;
+  padding: 0 30px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin: 35px auto;
-  padding: 0 24px;
-  max-width: 1250px;
-  width: 100%;
+  gap: 24px;
   box-sizing: border-box;
 }
 
-.explore h1 {
-  color: #29251f;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 500;
-  font-size: clamp(25px, 2.5vw, 36px);
-  line-height: 1.3;
-  margin: 0;
+/* Heading */
+
+.explore-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.explore-text {
-  max-width: 600px;
-  padding: 0;
+.explore-eyebrow {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: #aa8251;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+}
+
+.explore-heading h1 {
   margin: 0;
-  color: #81796f;
-  font-size: 15px;
-  line-height: 1.8;
+  color: #33271f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(27px, 3vw, 37px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.explore-heading p {
+  margin: 9px 0 0;
+  color: #8b8075;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.explore-heading-decoration {
+  color: #d7b47e;
+  font-size: 34px;
+}
+
+/* Status */
+
+.explore-status {
+  padding: 20px;
+  color: #796b5e;
+  text-align: center;
+}
+
+.explore-status button {
+  margin-top: 10px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #765238;
+  color: white;
+  cursor: pointer;
 }
 
 /* Category List */
 
 .explore-menu-list {
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
-  gap: 28px;
-  text-align: center;
-  margin: 12px 0;
-  padding: 5px 2px 12px;
+  gap: 30px;
+  padding: 10px 3px 18px;
+  margin: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
@@ -55,221 +92,182 @@
 /* Individual Category */
 
 .explore-menu-list-item {
-  flex: 0 0 105px;
-  min-width: 0;
+  flex: 0 0 112px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  text-align: center;
   cursor: pointer;
   user-select: none;
 }
 
 .explore-menu-list-item img {
-  width: 95px;
-  height: 95px;
+  width: 100px;
+  height: 100px;
+  padding: 4px;
   object-fit: cover;
+  border: 1px solid #e9dfd2;
   border-radius: 50%;
-  border: 2px solid transparent;
-  padding: 3px;
-  background: #f7f3ed;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  background: #f8f3eb;
+  box-shadow: 0 4px 14px rgba(70, 50, 30, 0.06);
+  transition: all 0.3s ease;
 }
 
-.explore-menu-list-item:hover img {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(80, 60, 40, 0.10);
+.explore-category-placeholder {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e9dfd2;
+  border-radius: 50%;
+  background: #f8f3eb;
+  color: #ad895a;
+  font-size: 30px;
+  transition: all 0.3s ease;
 }
 
-.explore-menu-list-item p {
+.explore-menu-list-item span {
   width: 100%;
-  margin: 12px 0 0;
-  color: #71695f;
+  margin-top: 13px;
+  color: #71665c;
   font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  text-align: center;
+  font-weight: 600;
+  line-height: 1.4;
   overflow-wrap: anywhere;
-  transition: color 0.2s ease;
+  transition: color 0.25s ease;
 }
 
-/* Selected Category */
+/* Hover */
 
-.explore-menu-list-item img.active {
-  border: 2px solid #98734f;
+.explore-menu-list-item:hover img,
+.explore-menu-list-item:hover .explore-category-placeholder {
+  transform: translateY(-5px);
+  border-color: #b58c58;
+  box-shadow: 0 9px 22px rgba(120, 83, 45, 0.14);
+}
+
+/* Selected */
+
+.explore-menu-list-item.selected img,
+.explore-menu-list-item.selected .explore-category-placeholder {
+  border: 2px solid #a77a45;
   padding: 3px;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(152, 115, 79, 0.12);
+  box-shadow: 0 0 0 4px rgba(167, 122, 69, 0.12);
 }
 
-.explore-menu-list-item:has(img.active) p {
-  color: #98734f;
+.explore-menu-list-item.selected span {
+  color: #9b713f;
   font-weight: 700;
+}
+
+.explore-menu-list-item:focus-visible {
+  outline: 2px solid #a77a45;
+  outline-offset: 5px;
+  border-radius: 12px;
 }
 
 /* Divider */
 
 .explore hr {
   width: 100%;
-  margin: 8px 0 0;
   height: 1px;
-  background-color: #e9e3da;
+  margin: 5px 0 0;
   border: none;
+  background: #eee5da;
 }
 
-/* ===========================
-   TABLET
-=========================== */
+/* Tablet */
 
 @media (max-width: 900px) {
   .explore {
-    margin: 28px auto;
-    padding: 0 20px;
-    gap: 15px;
+    margin: 36px auto;
+    padding: 0 22px;
   }
 
   .explore-menu-list {
-    gap: 22px;
+    gap: 23px;
   }
 
   .explore-menu-list-item {
-    flex-basis: 95px;
+    flex-basis: 100px;
   }
 
-  .explore-menu-list-item img {
-    width: 82px;
-    height: 82px;
+  .explore-menu-list-item img,
+  .explore-category-placeholder {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .explore {
+    margin: 28px auto;
+    padding: 0 16px;
+    gap: 18px;
   }
 
-  .explore-menu-list-item p {
+  .explore-heading h1 {
+    font-size: 26px;
+  }
+
+  .explore-heading p {
+    max-width: 260px;
     font-size: 12px;
   }
-}
 
-/* ===========================
-   MOBILE
-=========================== */
-
-@media (max-width: 600px) {
-  .explore {
-    margin: 22px auto;
-    padding: 0 16px;
-    gap: 12px;
-  }
-
-  .explore h1 {
-    font-size: 26px;
-    line-height: 1.35;
-  }
-
-  .explore-text {
-    max-width: 100%;
-    font-size: 13px;
-    line-height: 1.7;
+  .explore-heading-decoration {
+    font-size: 25px;
   }
 
   .explore-menu-list {
-    gap: 15px;
-    margin: 8px -16px;
-    padding: 8px 16px 14px;
+    gap: 16px;
+    margin: 0 -16px;
+    padding: 7px 16px 16px;
   }
 
   .explore-menu-list-item {
-    flex: 0 0 78px;
+    flex: 0 0 76px;
   }
 
-  .explore-menu-list-item img {
+  .explore-menu-list-item img,
+  .explore-category-placeholder {
     width: 68px;
     height: 68px;
+    padding: 3px;
+  }
+
+  .explore-menu-list-item.selected img,
+  .explore-menu-list-item.selected .explore-category-placeholder {
     padding: 2px;
-    border-width: 1.5px;
   }
 
-  .explore-menu-list-item img.active {
-    border-width: 2px;
-    padding: 2px;
-  }
-
-  .explore-menu-list-item p {
-    margin-top: 9px;
-    font-size: 11px;
-    line-height: 1.4;
-  }
-
-  .explore hr {
-    margin-top: 5px;
-  }
-}
-
-/* ===========================
-   SMALL MOBILE
-=========================== */
-
-@media (max-width: 360px) {
-  .explore {
-    padding: 0 12px;
-  }
-
-  .explore h1 {
-    font-size: 23px;
-  }
-
-  .explore-menu-list {
-    gap: 12px;
-    margin-left: -12px;
-    margin-right: -12px;
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .explore-menu-list-item {
-    flex-basis: 72px;
-  }
-
-  .explore-menu-list-item img {
-    width: 62px;
-    height: 62px;
-  }
-
-  .explore-menu-list-item p {
-    font-size: 10px;
-  }
-}
-.explore-menu-list-item {
-  appearance: none;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  padding: 0;
-  text-align: center;
-}
-
-.explore-menu-list-item:focus-visible {
-  outline: 2px solid #98734f;
-  outline-offset: 4px;
-  border-radius: 8px;
-}
-
-.explore-menu-list-item span {
-  width: 100%;
-  margin-top: 12px;
-  color: #71695f;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-.explore-menu-list-item.selected span {
-  color: #98734f;
-  font-weight: 700;
-}
-
-@media (max-width: 600px) {
   .explore-menu-list-item span {
     margin-top: 9px;
     font-size: 11px;
   }
 }
+
+@media (max-width: 360px) {
+  .explore-heading h1 {
+    font-size: 23px;
+  }
+
+  .explore-menu-list-item {
+    flex-basis: 70px;
+  }
+
+  .explore-menu-list-item img,
+  .explore-category-placeholder {
+    width: 62px;
+    height: 62px;
+  }
+}
+

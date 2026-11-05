@@ -4,24 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { StoreGive } from "../../context/StoreGive";
 import ReadMoreText from "../ReadMoreText/ReadMoreText";
 const ProductItem = ({
-id,
-name,
-price,
-description,
-image,
-images = [],
-stock,
+  id,
+  name,
+  price,
+  description,
+  image,
+  images = [],
+  stock,
+  parentCategory,
 }) => {
 const navigate = useNavigate();
-const { addToCart, getImageUrl } = useContext(StoreGive);
+const { addToCart, getImageUrl, categories } = useContext(StoreGive);
 
 const productImage = images.length > 0
 ? images[0]
 : image;
 
-const imageUrl = getImageUrl(productImage);
+const imageUrl = productImage
+  ? productImage.startsWith("http")
+    ? productImage
+    : getImageUrl(productImage)
+  : "";
 const outOfStock = Number(stock) <= 0;
-
+const parentCategoryName =
+  typeof parentCategory === "object"
+    ? parentCategory?.name
+    : categories?.find(
+        (cat) => String(cat._id) === String(parentCategory)
+      )?.name;
 const handleAddToCart = () => {
   if (outOfStock) {
     alert("This product is currently out of stock.");
@@ -47,12 +57,23 @@ const handleAddToCart = () => {
 };
 
 const handleBuyNow = () => {
-if (outOfStock) return;
+  if (outOfStock) return;
 
+  const token = localStorage.getItem("token");
 
-navigate(`/order?productId=${encodeURIComponent(id)}`);
+  if (!token) {
+    navigate("/login", {
+      state: {
+        from: `/order?productId=${encodeURIComponent(id)}`,
+      },
+    });
 
+    return;
+  }
 
+  addToCart(String(id), 1);
+
+  navigate(`/order?productId=${encodeURIComponent(id)}`);
 };
 
 return ( <article className="ProductItem">
@@ -77,7 +98,9 @@ Image not available </div>
 )}
 
 
-<span className="custom-badge">Zivnel Collection</span>
+{parentCategoryName && (
+  <span className="custom-badge">{parentCategoryName}</span>
+)}
 
 {outOfStock && (
   <span className="out-of-stock-overlay">
@@ -108,25 +131,25 @@ Image not available </div>
       <p className="out-of-stock-message">Out of stock</p>
     )}
 
-    <div className="product-actions">
- <button
-  type="button"
-  className="add-to-cart-button"
-  onClick={handleAddToCart}
-  disabled={outOfStock}
->
-  {outOfStock ? "Out of Stock" : "Add to Cart"}
-</button>
+{!outOfStock && (
+  <div className="product-actions">
+    <button
+      type="button"
+      className="add-to-cart-button"
+      onClick={handleAddToCart}
+    >
+      Add to Cart
+    </button>
 
-      <button
-        type="button"
-        className="buy-now-button"
-        onClick={handleBuyNow}
-        disabled={outOfStock}
-      >
-        Buy Now
-      </button>
-    </div>
+    <button
+      type="button"
+      className="buy-now-button"
+      onClick={handleBuyNow}
+    >
+      Buy Now
+    </button>
+  </div>
+)}
   </div>
 </article>
 

@@ -157,6 +157,15 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+.add-to-cart-button:disabled,
+.buy-now-button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
 /* Product Actions */
 .product-actions {
   display: grid;
