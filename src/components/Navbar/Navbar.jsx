@@ -181,19 +181,26 @@ const Navbar = () => {
             LOGO
         ================================= */}
 
-        <Link
-          to="/"
-          className="brand-logo"
-          onClick={closeMenu}
-        >
-          <div className="brand-text">
-            <img
-              src={assets.logo}
-              alt="Zivnel - Online Shopping Store"
-              className="logo-img"
-            />
-          </div>
-        </Link>
+      
+<Link
+  to="/"
+  className="brand-logo"
+  onClick={closeMenu}
+>
+  <div className="brand-text">
+    <img
+      src={assets.logo}
+      alt="Zivnel - Online Shopping Store"
+      className="logo-img"
+    />
+
+    <span className="brand-tagline">
+      Discover More. Shop Better.
+    </span>
+  </div>
+</Link>
+
+
 
         {/* ================================
             DESKTOP SEARCH

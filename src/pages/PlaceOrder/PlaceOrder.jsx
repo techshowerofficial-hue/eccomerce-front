@@ -311,7 +311,22 @@ const PlaceOrder = () => {
       alert("Please enter a valid 6-digit PIN code.");
       return false;
     }
+// Only Khandwa delivery allowed
+const city = formData.city.trim().toLowerCase();
+const district = formData.district.trim().toLowerCase();
+const pincode = formData.pincode.trim();
 
+if (city !== "khandwa" || pincode !== "450001") {
+  alert(
+    "Sorry! Currently, Zivnel delivers only in Khandwa city (PIN Code: 450001)."
+  );
+  return false;
+}
+
+if (district !== "khandwa" && district !== "east nimar") {
+  alert("Please enter Khandwa district.");
+  return false;
+}
     if (formData.email.trim()) {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
