@@ -691,3 +691,16 @@ font-size: 14px;
 font-size: 14px;
 }
 }
+.checkout-summary h3 {
+  color: #222 !important;
+}
+
+.checkout-summary-item span,
+.checkout-summary-item strong {
+  color: #222 !important;
+}
+
+.checkout-total span,
+.checkout-total strong {
+  color: #222 !important;
+}

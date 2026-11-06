@@ -436,8 +436,7 @@ const handleShareProduct = async () => {
           </div>
 
           <p className="product-price-note">
-            Shipping charges, if applicable, will be shown
-            during checkout.
+           Free Shipping in Khandwa
           </p>
 
           <div className="product-divider" />
