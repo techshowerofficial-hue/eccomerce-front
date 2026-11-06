@@ -196,7 +196,72 @@ border-radius: 14px;
 .edit-selected-address-button:hover {
   background: #f2f2f2;
 }
+.checkout-choice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
 
+.checkout-choice-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.checkout-choice-modal h2 {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.checkout-choice-modal > p {
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.guest-checkout-btn,
+.login-checkout-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.guest-checkout-btn {
+  background: #171717;
+  color: white;
+  border: none;
+}
+
+.login-checkout-btn {
+  background: white;
+  color: #171717;
+  border: 1px solid #171717;
+}
+
+.checkout-benefits {
+  margin-top: 20px;
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.checkout-benefits p {
+  font-size: 13px;
+  color: #555;
+  margin: 10px 0;
+}
 /* ==========================================
    MOBILE
 ========================================== */

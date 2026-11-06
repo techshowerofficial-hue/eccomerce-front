@@ -142,22 +142,15 @@ const ProductDetails = () => {
 const handleBuyNow = () => {
   if (outOfStock) return;
 
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate("/login", {
-      state: {
-        from: `/order?productId=${encodeURIComponent(product._id)}`,
-      },
-    });
-
-    return;
-  }
-
   addToCart(String(product._id), quantity);
 
   navigate(
-    `/order?productId=${encodeURIComponent(product._id)}`
+    `/order?productId=${encodeURIComponent(product._id)}`,
+    {
+      state: {
+        quantity,
+      },
+    }
   );
 };
 

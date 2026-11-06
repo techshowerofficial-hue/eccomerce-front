@@ -59,15 +59,8 @@ const handleAddToCart = () => {
 const handleBuyNow = () => {
   if (outOfStock) return;
 
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate("/login", {
-      state: {
-        from: `/order?productId=${encodeURIComponent(id)}`,
-      },
-    });
-
+  if (!id) {
+    alert("Product ID is missing.");
     return;
   }
 
