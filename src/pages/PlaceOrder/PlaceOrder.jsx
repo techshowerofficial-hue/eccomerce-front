@@ -34,6 +34,8 @@ const PlaceOrder = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("COD");
 
   // Form state
   const [formData, setFormData] = useState(INITIAL_FORM);
@@ -350,20 +352,22 @@ if (district !== "khandwa" && district !== "east nimar") {
   // PLACE ORDER
   // ==========================================
 
-  const handlePlaceOrder = async (event) => {
+  // First validate the form, then show payment/confirmation popup.
+  const handlePlaceOrder = (event) => {
     event.preventDefault();
 
     if (isSubmitting) return;
-
     if (!validateForm()) return;
 
+    setPaymentMethod("COD");
+    setShowConfirmModal(true);
+  };
+
+  // Final confirmation actually submits the order.
+  const handleConfirmOrder = async () => {
+    if (isSubmitting) return;
+
     const authToken = token || localStorage.getItem("token");
-
-    if (!authToken) {
-      alert("Please login to continue.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
@@ -390,15 +394,16 @@ if (district !== "khandwa" && district !== "east nimar") {
         })),
 
         notes: formData.notes.trim(),
+        paymentMethod,
       };
 
       const response = await axios.post(
         `${API_URL}/api/orders/place`,
         orderData,
         {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
+          headers: authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : {},
         }
       );
 
@@ -417,36 +422,38 @@ if (district !== "khandwa" && district !== "east nimar") {
         response.data.orderId ||
         "";
 
-      // Refresh address list after successful order.
-      // Backend should save new addresses in user.addresses.
-      try {
-        const addressResponse = await axios.get(
-          `${API_URL}/api/user/addresses`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
+      // Refresh saved addresses only for logged-in customers.
+      if (authToken) {
+        try {
+          const addressResponse = await axios.get(
+            `${API_URL}/api/user/addresses`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
 
-        if (addressResponse.data?.success) {
-          setSavedAddresses(
-            Array.isArray(addressResponse.data.addresses)
-              ? addressResponse.data.addresses
-              : []
+          if (addressResponse.data?.success) {
+            setSavedAddresses(
+              Array.isArray(addressResponse.data.addresses)
+                ? addressResponse.data.addresses
+                : []
+            );
+          }
+        } catch (addressError) {
+          console.error(
+            "Refresh saved addresses error:",
+            addressError.response?.data || addressError.message
           );
         }
-      } catch (addressError) {
-        console.error(
-          "Refresh saved addresses error:",
-          addressError.response?.data || addressError.message
-        );
       }
 
       if (!productId && typeof clearCart === "function") {
         clearCart();
       }
 
+      setShowConfirmModal(false);
       setSuccessOrderId(String(orderId || "Confirmed"));
     } catch (error) {
       console.error(
@@ -535,6 +542,13 @@ if (district !== "khandwa" && district !== "east nimar") {
     <div className="placeorder">
       <div className="delivery-information">
         <h2>Delivery Information</h2>
+
+        {!(token || localStorage.getItem("token")) && (
+          <div className="guest-checkout-notice">
+            <strong>Guest Checkout</strong>
+            <span>You can place your order without creating an account.</span>
+          </div>
+        )}
 
         {loadingAddresses ? (
           <div className="address-loading">
@@ -868,6 +882,80 @@ if (district !== "khandwa" && district !== "east nimar") {
             Your order status will initially be Pending.
           </p>
         </form>
+
+        {showConfirmModal && (
+          <div
+            className="order-confirm-overlay"
+            role="presentation"
+            onClick={() => !isSubmitting && setShowConfirmModal(false)}
+          >
+            <div
+              className="order-confirm-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="order-confirm-title"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="order-confirm-close"
+                aria-label="Close confirmation"
+                onClick={() => setShowConfirmModal(false)}
+                disabled={isSubmitting}
+              >
+                ×
+              </button>
+
+              <h2 id="order-confirm-title">Payment Method</h2>
+              <p className="order-confirm-subtitle">
+                Select how you want to pay for your order.
+              </p>
+
+              <label className={`payment-method-option ${paymentMethod === "COD" ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="COD"
+                  checked={paymentMethod === "COD"}
+                  onChange={() => setPaymentMethod("COD")}
+                />
+                <span className="payment-method-icon">₹</span>
+                <span className="payment-method-copy">
+                  <strong>Cash on Delivery</strong>
+                  <small>Pay when your order is delivered.</small>
+                </span>
+                <span className="payment-method-check">✓</span>
+              </label>
+
+              <div className="order-confirm-total">
+                <span>Total to pay</span>
+                <strong>₹{totalAmount.toLocaleString("en-IN")}</strong>
+              </div>
+
+              <p className="order-confirm-question">
+                Are you sure you want to place this order?
+              </p>
+
+              <button
+                type="button"
+                className="confirm-order-button"
+                onClick={handleConfirmOrder}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Placing Order..." : "Yes, Confirm Order"}
+              </button>
+
+              <button
+                type="button"
+                className="cancel-order-button"
+                onClick={() => setShowConfirmModal(false)}
+                disabled={isSubmitting}
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
